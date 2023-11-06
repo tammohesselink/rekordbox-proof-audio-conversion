@@ -10,15 +10,15 @@ The main functionality of this repo is scanning through your Rekordbox library a
 ### Converting all unplayable files
 The easiest way to batch convert all the files in your Rekordbox that are not playable on CDJs is by creating an xml export in Rekordbox which should contain info on all the tracks in your library. Once you have that export, you can run the following to read and convert all unplayable files:
 
-`poetry run rekordbox-convert-unplayable-files rekordbox.xml --archive-folder archive`
+`poetry run rekordbox-convert-unplayable-files rekordbox.xml --archive-folder /path/to/archive`
 
 This will convert all WAV / AIFF which are not 16 / 24 bit or 44.1 / 48 kHz to a playable format. It will move the original file to the archive folder and convert that file to a playable bit depth / sample rate at the original location. That way Rekordbox will automatically load the correct new files after converting!. The archive folder will also contain a file `converted.csv` which contains a log of all files converted.
 
-Additionally, all FLACs will also be converted to AIFF, and written to `archive/converted_flacs`. As these flacs will change filename, you need to manually add these to Rekordbox.
+Additionally, all FLACs will also be converted to AIFF, and written to `/path/to/archive/converted_flacs`. As these flacs will change filename, you need to manually add these to Rekordbox.
 
 ### Reverting the conversion
 In case of errors, you can revert the conversions by running
-`poetry run rekordbox-revert-conversion --archive-csv-path archive/converted.csv`
+`poetry run rekordbox-revert-conversion --archive-csv-path /path/to/archive/converted.csv`
 
 This moves the original files in the archive folder back to its original place.
 
