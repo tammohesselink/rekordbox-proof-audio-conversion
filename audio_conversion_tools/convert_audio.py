@@ -84,7 +84,7 @@ def convert_aif_to_16bit(file_name: str, temp_location: str | None = None):
     # If already 16-bit and either 44.1kHz or 48kHz, move back to the original name and return
     if check_bit_depth_allowed(bit_depth) and check_sample_rate_allowed(sample_rate):
         os.rename(temp_location, file_name)
-        logger.info(f"Skipped {file_name} as it's already in desired format.")
+        logger.warning(f"Skipped {file_name} as it's already in desired format.")
         return False
 
     target_sample_rate = determine_target_sample_rate(sample_rate)
@@ -150,7 +150,7 @@ def convert_wav_to_16bit(file_name: str, temp_location: str | None = None):
     # If already 16-bit and either 44.1kHz or 48kHz, move back to the original name and return
     if check_bit_depth_allowed(bit_depth) and check_sample_rate_allowed(sample_rate):
         os.rename(temp_location, file_name)
-        logger.info(f"Skipped {file_name} as it's already in desired format.")
+        logger.warning(f"Skipped {file_name} as it's already in desired format.")
         return False
 
     target_sample_rate = determine_target_sample_rate(sample_rate)
