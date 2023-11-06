@@ -1,0 +1,50 @@
+name: pytest
+
+on:
+  push:
+
+jobs:
+  tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: "1.5.1"
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Install FFmpeg
+        run: |
+          if [ -d ~/.cache/ffmpeg ]; then
+            mkdir -p ~/bin
+            cp -a ~/.cache/ffmpeg/. ~/bin/
+          else
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+            mkdir -p ~/.cache/ffmpeg
+            cp -a /usr/bin/. ~/.cache/ffmpeg/
+            mkdir -p ~/bin
+            cp -a /usr/bin/. ~/bin/
+          fi
+
+      - name: Install dependencies
+        id: install_dependency_from_cache
+        continue-on-error: true
+        run: |
+          poetry install --sync
+
+      - name: Run tests
+        run: source .venv/bin/activate && pytest .
