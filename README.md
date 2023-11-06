@@ -10,15 +10,15 @@ The main functionality of this repo is scanning through your Rekordbox library a
 ### Converting all unplayable files
 The easiest way to batch convert all the files in your Rekordbox that are not playable on CDJs is by creating an xml export in Rekordbox which should contain info on all the tracks in your library. Once you have that export, you can run the following to read and convert all unplayable files:
 
-`poetry run rekordbox-convert-unplayable-files rekordbox.xml --archive-folder archive`
+`poetry run rekordbox-convert-unplayable-files rekordbox.xml --archive-folder /path/to/archive`
 
 This will convert all WAV / AIFF which are not 16 / 24 bit or 44.1 / 48 kHz to a playable format. It will move the original file to the archive folder and convert that file to a playable bit depth / sample rate at the original location. That way Rekordbox will automatically load the correct new files after converting!. The archive folder will also contain a file `converted.csv` which contains a log of all files converted.
 
-Additionally, all FLACs will also be converted to AIFF, and written to `archive/converted_flacs`. As these flacs will change filename, you need to manually add these to Rekordbox.
+Additionally, all FLACs will also be converted to AIFF, and written to `/path/to/archive/converted_flacs`. As these flacs will change filename, you need to manually add these to Rekordbox.
 
 ### Reverting the conversion
 In case of errors, you can revert the conversions by running
-`poetry run rekordbox-revert-conversion --archive-csv-path archive/converted.csv`
+`poetry run rekordbox-revert-conversion --archive-csv-path /path/to/archive/converted.csv`
 
 This moves the original files in the archive folder back to its original place.
 
@@ -34,10 +34,12 @@ The script will ask you whether you want to delete the original files after conv
 ### Adding the functions to the right click menu
 A useful thing to do is to add this functionality to your right click menu, so you can right click while in a folder to convert all files inside of this folder (for example your downloads folder or a folder of an album you've just purchased). This is possible both on Windows as well as on Mac.
 
+It is possible to add the `--recursive` flag when running the script to also convert all files in subfolders of the current folder.
+
 #### Windows
 Example behaviour:
 [Here](https://www.theverge.com/23707964/windows-11-regedit-registry-menu-how-to) is a nice explanation of how to add functionality to the right click menu. This will automatically run from the correct folder. You can add the following scripts for example:
-```ADD```
+```C:/path/to/venv/python "C:/path/to/repo/scripts/convert_aiff_to_16bit.py"```
 
 #### Mac
 Example behaviour:
