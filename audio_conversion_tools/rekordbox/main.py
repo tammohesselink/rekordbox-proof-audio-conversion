@@ -44,7 +44,7 @@ def convert_rekordbox_audio(
         )
     ]
     percentage_unplayable = (len(unplayable_files) / len(lossless_files)) * 100
-    logger.info(f"Found {len(unplayable_files)} ({percentage_unplayable:.2f}%) unplayable WAV / AIFFs")
+    logger.info(f"Found {len(unplayable_files)} ({percentage_unplayable:.1f}%) unplayable WAV / AIFFs")
 
     logger.info(f"Will archive original files to {Path(archive_folder).resolve()}")
     logger.info("Starting the conversion process...")
