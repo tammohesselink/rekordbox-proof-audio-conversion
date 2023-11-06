@@ -13,7 +13,7 @@ EOD
 
 osascript <<EOD
 tell application "Terminal"
-    do script "cd '$currentFinderPath'; <audio-conversion-tools/.venv/bin/python> <audio-conversion-tools/scripts/convert_lossless_to_aiff.py>"
+    do script "cd '$currentFinderPath'; /path/to/your/venv/bin/python /path/to/your/repo/scripts/convert_lossless_to_aiff.py"
     activate
 end tell
 EOD

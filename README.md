@@ -34,10 +34,12 @@ The script will ask you whether you want to delete the original files after conv
 ### Adding the functions to the right click menu
 A useful thing to do is to add this functionality to your right click menu, so you can right click while in a folder to convert all files inside of this folder (for example your downloads folder or a folder of an album you've just purchased). This is possible both on Windows as well as on Mac.
 
+It is possible to add the `--recursive` flag when running the script to also convert all files in subfolders of the current folder.
+
 #### Windows
 Example behaviour:
 [Here](https://www.theverge.com/23707964/windows-11-regedit-registry-menu-how-to) is a nice explanation of how to add functionality to the right click menu. This will automatically run from the correct folder. You can add the following scripts for example:
-```ADD```
+```C:/path/to/venv/python "C:/path/to/repo/scripts/convert_aiff_to_16bit.py"```
 
 #### Mac
 Example behaviour:
