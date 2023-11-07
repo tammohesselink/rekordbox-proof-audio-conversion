@@ -55,7 +55,7 @@ def convert_rekordbox_audio(
     # We also convert all FLACs in Rekordbox.
     flac_files = [track for track in tracks if track.Kind.lower()[:4] == "flac"]
 
-    logger.info(f"Additionally found {len(flac_files)} FLACs which are also unplayable")
+    logger.info(f"Additionally found {len(flac_files)} FLACs which are also unplayable on CDJs")
 
     convert_flacs(flac_files, Path(archive_folder))
     logger.warning(

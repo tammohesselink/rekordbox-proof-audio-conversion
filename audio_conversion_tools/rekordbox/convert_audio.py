@@ -41,6 +41,13 @@ def convert_files(unplayable_files: list[xml.Track], archive_folder: Path):
 
         location_within_archive_folder = archive_folder / Path(file.Location).name
 
+        if location_within_archive_folder.exists():
+            logger.error(
+                f"File {Path(file_location).name} already exists in the archive, will not overwrite the archive. "
+                "Clear your archive manually if you want to confirm this file."
+            )
+            continue
+
         succesful_conversion = False
         try:
             if file.Kind.lower()[:3] == "wav":
@@ -77,11 +84,8 @@ def convert_flacs(flac_files: list[xml.Track], archive_folder: Path):
 
         location_within_archive_folder = archive_folder / "converted_flacs" / Path(file.Location).name
 
-        try:
-            convert_to_aiff(file_location, location_within_archive_folder)
+        if convert_to_aiff(file_location, location_within_archive_folder):
             succesful_conversions += 1
-        except ConversionError:
-            logger.info(f"Error converting file {file.Location}")
 
     logger.info(f"Succesfully converted {succesful_conversions} of {len(flac_files)} files!")
 
