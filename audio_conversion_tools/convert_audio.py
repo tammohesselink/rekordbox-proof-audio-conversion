@@ -201,13 +201,17 @@ def convert_wav_to_16bit(file_name: str, temp_location: str | None = None):
 
 
 def convert_to_aiff(file_name: str, output_name: str | None = None):
+    if not Path(file_name).exists():
+        logger.error(f"The file {file_name} does not exist!")
+        return False
+
     if output_name is None:
         output_name = file_name.rsplit(".", 1)[0] + ".aiff"
 
     sample_rate, bit_depth = get_file_info(file_name)
 
     if sample_rate is None or bit_depth is None:
-        logger.warning(f"Couldn't determine sample rate or bit depth for {file_name}")
+        logger.warning(f"Couldn't determine sample rate or bit depth for {file_name}, will not convert")
         return False
 
     target_sample_rate = determine_target_sample_rate(sample_rate)
