@@ -13,24 +13,25 @@ class ConversionError(Exception):
 
 def get_file_info(file_name):
     """Return the sample rate and bit depth of the file using FFmpeg."""
-    cmd = ["ffmpeg", "-hide_banner", "-i", file_name, "-hide_banner", "-vn"]
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    lines = result.stderr.split("\n")
-
     sample_rate = None
     bit_depth = None
 
-    for line in lines:
-        if "Audio" in line:
-            for word in line.split(","):
-                if "Hz" in word:
-                    sample_rate = int(word.strip().split(" ")[0])
-                if "s16" in word:
-                    bit_depth = 16
-                elif "s24" in word:
-                    bit_depth = 24
-                elif "s32" in word:
-                    bit_depth = 32
+    cmd = ["ffprobe", "-hide_banner", "-i", file_name, "-show_entries", "stream=sample_rate", "-v", "quiet", "-of", "csv=p=0"]
+    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    if result.returncode == 0:
+        sample_rate = int(result.stdout.strip())
+    else:
+        print(f"Error: {result.stderr}")
+
+    # Bit depth
+    cmd = ["ffprobe", "-hide_banner", "-i", file_name, "-show_entries", "stream=bits_per_sample", "-v", "quiet", "-of", "csv=p=0"]
+    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    if result.returncode == 0:
+        bit_depth = int(result.stdout.strip())
+    else:
+        print(f"Error: {result.stderr}")
 
     return sample_rate, bit_depth
 

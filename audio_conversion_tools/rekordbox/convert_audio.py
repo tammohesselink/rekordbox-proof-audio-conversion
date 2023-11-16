@@ -42,10 +42,8 @@ def convert_files(unplayable_files: list[xml.Track], archive_folder: Path):
         location_within_archive_folder = archive_folder / Path(file.Location).name
 
         if location_within_archive_folder.exists():
-            logger.error(
-                f"File {Path(file_location).name} already exists in the archive, will not overwrite the archive. "
-                "Clear your archive manually if you want to confirm this file."
-            )
+            logger.error(f"File {Path(file_location).name} already exists in the archive, will not overwrite the archive. "
+                         "Clear your archive manually if you want to confirm this file.")
             continue
 
         succesful_conversion = False
@@ -83,7 +81,7 @@ def convert_flacs(flac_files: list[xml.Track], archive_folder: Path):
         file_location = Path(f"/{file.Location}").absolute()
 
         location_within_archive_folder = archive_folder / "converted_flacs" / Path(file.Location).name
-
+        
         if convert_to_aiff(file_location, location_within_archive_folder):
             succesful_conversions += 1
 
