@@ -16,8 +16,19 @@ def get_file_info(file_name):
     sample_rate = None
     bit_depth = None
 
-    cmd = ["ffprobe", "-hide_banner", "-i", file_name, "-show_entries", "stream=sample_rate", "-v", "quiet", "-of", "csv=p=0"]
-    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    cmd = [
+        "ffprobe",
+        "-hide_banner",
+        "-i",
+        file_name,
+        "-show_entries",
+        "stream=sample_rate",
+        "-v",
+        "quiet",
+        "-of",
+        "csv=p=0",
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
 
     if result.returncode == 0:
         sample_rate = int(result.stdout.strip())
@@ -25,8 +36,19 @@ def get_file_info(file_name):
         print(f"Error: {result.stderr}")
 
     # Bit depth
-    cmd = ["ffprobe", "-hide_banner", "-i", file_name, "-show_entries", "stream=bits_per_sample", "-v", "quiet", "-of", "csv=p=0"]
-    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    cmd = [
+        "ffprobe",
+        "-hide_banner",
+        "-i",
+        file_name,
+        "-show_entries",
+        "stream=bits_per_sample",
+        "-v",
+        "quiet",
+        "-of",
+        "csv=p=0",
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
 
     if result.returncode == 0:
         bit_depth = int(result.stdout.strip())
