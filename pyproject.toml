@@ -10,7 +10,7 @@ packages = [{include = "audio_conversion_tools"}]
 python = ">=3.10,<3.13"
 pre-commit = "^3.4.0"
 pandas = "^2.1.2"
-pyrekordbox = "0.1.5"
+pyrekordbox = "^0.2.2"
 loguru = "^0.7.0"
 mutagen = "^1.46.0"
 pydub = "^0.25.1"
