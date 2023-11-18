@@ -6,6 +6,7 @@ from pyrekordbox import Rekordbox6Database
 from pyrekordbox.xml import RekordboxXml
 
 from audio_conversion_tools.rekordbox.constants import ALLOWED_BIT_DEPTHS, ALLOWED_SAMPLE_RATES, FILE_TYPES_TO_CONVERT
+from audio_conversion_tools.rekordbox.create_m3u_playlist import create_m3u_playlist
 from audio_conversion_tools.rekordbox.convert_audio import _calculate_bit_depth, convert_files, convert_flacs
 
 
@@ -51,6 +52,9 @@ def convert_rekordbox_audio(
 
     # We convert all files to the closest playable format.
     convert_files(unplayable_files, Path(archive_folder))
+
+    # We create an .m3u file containing all the unplayable files.
+    create_m3u_playlist(unplayable_files, Path(archive_folder) / "unplayable_files.m3u")
 
     # We also convert all FLACs in Rekordbox.
     flac_files = [track for track in tracks if track.Kind.lower()[:4] == "flac"]
