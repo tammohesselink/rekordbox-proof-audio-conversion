@@ -12,7 +12,7 @@ The easiest way to batch convert all the files in your Rekordbox that are not pl
 
 `poetry run rekordbox-convert-unplayable-files rekordbox.xml --archive-folder /path/to/archive`
 
-This will convert all WAV / AIFF which are not 16 / 24 bit or 44.1 / 48 kHz to a playable format. It will move the original file to the archive folder and convert that file to a playable bit depth / sample rate at the original location. That way Rekordbox will automatically load the correct new files after converting!. The archive folder will also contain a file `converted.csv` which contains a log of all files converted.
+This will convert all WAV / AIFF which are not 16 / 24 bit or 44.1 / 48 kHz to a playable format. It will move the original file to the archive folder and convert that file to a playable bit depth / sample rate at the original location. The archive folder will also contain a file `converted.csv` which contains a log of all files converted. Unfortunately Rekordbox needs to reanalyze the files in order to know the new bit depth / sample rate, so simply reloading the tags on the converted files is not enough. The function creates a playlist `unplayable_files.m3u` in the archive folder which you can then load in a Rekordbox playlist (these files should already be in your collection, as these are from the old location). Once you have this Rekordbox playlist ready, you can simply select all and manually analyze tracks again. After doing that, the next time you sync with your USB, the unplayable files should be overwritten by the converted files.
 
 Additionally, all FLACs will also be converted to AIFF, and written to `/path/to/archive/converted_flacs`. As these flacs will change filename, you need to manually add these to Rekordbox.
 
