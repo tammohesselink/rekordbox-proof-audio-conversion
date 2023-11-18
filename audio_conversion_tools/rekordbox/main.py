@@ -6,8 +6,8 @@ from pyrekordbox import Rekordbox6Database
 from pyrekordbox.xml import RekordboxXml
 
 from audio_conversion_tools.rekordbox.constants import ALLOWED_BIT_DEPTHS, ALLOWED_SAMPLE_RATES, FILE_TYPES_TO_CONVERT
-from audio_conversion_tools.rekordbox.create_m3u_playlist import create_m3u_playlist
 from audio_conversion_tools.rekordbox.convert_audio import _calculate_bit_depth, convert_files, convert_flacs
+from audio_conversion_tools.rekordbox.create_m3u_playlist import create_m3u_playlist
 
 
 def convert_rekordbox_audio(

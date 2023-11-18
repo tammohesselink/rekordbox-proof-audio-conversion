@@ -1,5 +1,6 @@
 from audio_conversion_tools.logging import logger
 
+
 def create_m3u_playlist(files, playlist_location):
     with open(playlist_location, "w") as playlist_file:
         for file in files:
