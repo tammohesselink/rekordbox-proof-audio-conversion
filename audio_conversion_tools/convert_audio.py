@@ -20,7 +20,6 @@ def get_file_info(file_name):
         info = sf.info(file_name)
         sample_rate = info.samplerate
         bit_depth = subtype_mapping[info.subtype]
-        logger.info(f"Detected {bit_depth} bit / {sample_rate}Hz for {file_name}")
         return sample_rate, bit_depth
     except Exception as e:
         logger.error(f"Could not get file info for {file_name}: {e}")
