@@ -22,6 +22,7 @@ def test_convert_wav():
     assert converted_sample_rate == 44100
     assert converted_bit_rate == 16
 
+    os.remove(TEST_WAV_LOCATION)
     os.rename(TEST_TEMP_WAV_LOCATION, TEST_WAV_LOCATION)
 
 
@@ -38,4 +39,5 @@ def test_convert_aiff():
     assert converted_sample_rate == 44100
     assert converted_bit_rate == 16
 
+    os.remove(TEST_AIFF_LOCATION)
     os.rename(TEST_TEMP_AIFF_LOCATION, TEST_AIFF_LOCATION)

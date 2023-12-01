@@ -2,6 +2,8 @@ import os
 import subprocess
 from pathlib import Path
 
+import soundfile as sf
+
 from audio_conversion_tools.logging import logger
 
 FFMPEG_LOG_LOCATION = Path(__file__).parent.parent / "ffmpeg_log.log"
@@ -12,46 +14,17 @@ class ConversionError(Exception):
 
 
 def get_file_info(file_name):
-    """Return the sample rate and bit depth of the file using FFmpeg."""
-    sample_rate = None
-    bit_depth = None
+    subtype_mapping = {"PCM_16": 16, "PCM_24": 24, "PCM_32": 32}
 
-    cmd = [
-        "ffprobe",
-        "-hide_banner",
-        "-i",
-        file_name,
-        "-show_entries",
-        "stream=sample_rate",
-        "-v",
-        "quiet",
-        "-of",
-        "csv=p=0",
-    ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
-
-    if result.returncode == 0:
-        sample_rate = int(result.stdout.strip())
-
-    # Bit depth
-    cmd = [
-        "ffprobe",
-        "-hide_banner",
-        "-i",
-        file_name,
-        "-show_entries",
-        "stream=bits_per_sample",
-        "-v",
-        "quiet",
-        "-of",
-        "csv=p=0",
-    ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
-
-    if result.returncode == 0:
-        bit_depth = int(result.stdout.strip())
-
-    return sample_rate, bit_depth
+    try:
+        info = sf.info(file_name)
+        sample_rate = info.samplerate
+        bit_depth = subtype_mapping[info.subtype]
+        logger.info(f"Detected {bit_depth} bit / {sample_rate}Hz for {file_name}")
+        return sample_rate, bit_depth
+    except Exception as e:
+        logger.error(f"Could not get file info for {file_name}: {e}")
+        return None, None
 
 
 def determine_target_sample_rate(sample_rate: int) -> int:

@@ -31,12 +31,9 @@ if __name__ == "__main__":
 
         for file_name in files_to_convert:
             if convert_to_aiff(file_name):
-                logger.info(f"Converted {file_name}")
                 if delete_files:
                     os.remove(file_name)
                     logger.info(f"Deleted {file_name}")
-            else:
-                logger.error(f"Could not conver {file_name} to aiff, check the ffmpeg logs!")
     else:
         logger.info("No .wav or .flac files found")
 
