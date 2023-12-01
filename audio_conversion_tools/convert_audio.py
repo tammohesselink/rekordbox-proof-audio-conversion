@@ -32,8 +32,6 @@ def get_file_info(file_name):
 
     if result.returncode == 0:
         sample_rate = int(result.stdout.strip())
-    else:
-        print(f"Error: {result.stderr}")
 
     # Bit depth
     cmd = [
@@ -52,8 +50,6 @@ def get_file_info(file_name):
 
     if result.returncode == 0:
         bit_depth = int(result.stdout.strip())
-    else:
-        print(f"Error: {result.stderr}")
 
     return sample_rate, bit_depth
 
@@ -101,7 +97,7 @@ def convert_aif_to_16bit(file_name: str, temp_location: str | None = None):
     sample_rate, bit_depth = get_file_info(temp_location)
 
     if sample_rate is None or bit_depth is None:
-        logger.warning(f"Couldn't determine sample rate or bit depth for {temp_location}")
+        logger.error(f"Couldn't determine sample rate or bit depth for {temp_location}")
         return False
 
     # If already 16-bit and either 44.1kHz or 48kHz, move back to the original name and return
@@ -176,7 +172,11 @@ def convert_wav_to_16bit(file_name: str, temp_location: str | None = None):
         logger.warning(f"Skipped {file_name} as it's already in desired format.")
         return False
 
-    target_sample_rate = determine_target_sample_rate(sample_rate)
+    try:
+        target_sample_rate = determine_target_sample_rate(sample_rate)
+    except ValueError as e:
+        logger.error(f"Could not determine target sample rate for {file_name}: {e}")
+        return False
 
     cmd = [
         "ffmpeg",
@@ -234,10 +234,14 @@ def convert_to_aiff(file_name: str, output_name: str | None = None):
     sample_rate, bit_depth = get_file_info(file_name)
 
     if sample_rate is None or bit_depth is None:
-        logger.warning(f"Couldn't determine sample rate or bit depth for {file_name}, will not convert")
+        logger.error(f"Couldn't determine sample rate or bit depth for {file_name}, will not convert")
         return False
 
-    target_sample_rate = determine_target_sample_rate(sample_rate)
+    try:
+        target_sample_rate = determine_target_sample_rate(sample_rate)
+    except ValueError as e:
+        logger.error(f"Could not determine target sample rate for {file_name}: {e}")
+        return False
 
     cmd = [
         "ffmpeg",

@@ -39,7 +39,7 @@ It is possible to add the `--recursive` flag when running the script to also con
 #### Windows
 Example behaviour:
 [Here](https://www.theverge.com/23707964/windows-11-regedit-registry-menu-how-to) is a nice explanation of how to add functionality to the right click menu. This will automatically run from the correct folder. You can add the following scripts for example:
-```C:/path/to/venv/python "C:/path/to/repo/scripts/convert_aiff_to_16bit.py"```
+```cmd.exe /k C:/path/to/venv/python "C:/path/to/repo/scripts/convert_aiff_to_16bit.py"```
 
 #### Mac
 Example behaviour:
