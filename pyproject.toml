@@ -15,6 +15,7 @@ loguru = "^0.7.0"
 mutagen = "^1.46.0"
 pydub = "^0.25.1"
 typer = "^0.9.0"
+soundfile = "^0.12.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.3.0"
