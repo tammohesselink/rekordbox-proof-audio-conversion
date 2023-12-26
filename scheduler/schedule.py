@@ -77,7 +77,6 @@ class FileHandler(FileSystemEventHandler):
         self.on_modified(event)
 
     def on_modified(self, event):
-        print(self.locked_files)
         if event.is_directory:
             return
 
