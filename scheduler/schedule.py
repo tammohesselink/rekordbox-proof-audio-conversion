@@ -23,7 +23,7 @@ class FileHandler(FileSystemEventHandler):
         super().__init__()
         self.file_sizes: dict[str, int] = {}
         self.processed_files: list[str] = []
-        self.locks = {}  # Dictionary to store locks for each file
+        self.locked_files: list[str] = []
 
         # Use a separate observer for each downloads folder
         self.observers = [Observer() for _ in downloads_folders]
@@ -32,11 +32,6 @@ class FileHandler(FileSystemEventHandler):
         for observer, folder in zip(self.observers, downloads_folders):
             observer.schedule(self, path=folder, recursive=True)
             observer.start()
-
-    def get_lock(self, file_path):
-        if file_path not in self.locks:
-            self.locks[file_path] = threading.Lock()
-        return self.locks[file_path]
     
     def on_created(self, event):
         if event.is_directory:
@@ -52,6 +47,7 @@ class FileHandler(FileSystemEventHandler):
         self.file_sizes[file_path] = os.path.getsize(file_path)
 
     def on_modified(self, event):
+        print(self.locked_files)
         if event.is_directory:
             return
 
@@ -61,8 +57,13 @@ class FileHandler(FileSystemEventHandler):
         if file_path.endswith('.part'):
             return
         
+        # If file has been processed or is currently being processed, skip
         if file_path in self.processed_files:
-            logger.debug(f"File {file_path} has already been processed, skipping")
+            # logger.debug(f"File {file_path} has already been processed, skipping")
+            return
+        
+        if file_path in self.locked_files:
+            logger.debug(f"File {file_path} is currently being processed, skipping")
             return
 
         try:
@@ -70,6 +71,9 @@ class FileHandler(FileSystemEventHandler):
         except FileNotFoundError:
             logger.warning(f"File {file_path} not found, skipping (probably a temporary download file)")
             return
+
+        # We lock the file so we don't attempt to run conversion twice at the same time        
+        self.locked_files.append(file_path)
 
         # Check if the file size has remained constant for a certain period
         logger.info(f'Checking if {file_path} has finished downloading...')
@@ -82,20 +86,20 @@ class FileHandler(FileSystemEventHandler):
                     logger.info(f"No conversion required for {file_path}")
                     return
 
-            lock = self.get_lock(file_path)
-            with lock:
-                logger.info(f'Download completed: {file_path}')
-                # Mark the file as processed to avoid double execution
-                self.processed_files.append(file_path)
+            logger.info(f'Download completed: {file_path}')
+            # Mark the file as processed to avoid double execution
+            self.processed_files.append(file_path)
 
-                logger.info(f"Converting {file_path} to 16-bit AIFF...")
-                self.processed_files.append(str(Path(file_path).with_suffix(".aiff")))
-                run_script_on_new_file(file_path)
+            logger.info(f"Converting {file_path} to 16-bit AIFF...")
+            self.processed_files.append(str(Path(file_path).with_suffix(".aiff")))
+            run_script_on_new_file(file_path)
 
         else:
             # Update the file size if the file is still being modified
             logger.debug(f"File {file_path} is still being modified, updating file size")
             self.file_sizes[file_path] = current_size
+        
+        self.locked_files.remove(file_path)
             
 def run_script_on_new_file(filename: str):
     try:
@@ -116,7 +120,7 @@ if __name__ == "__main__":
 
     try:
         while True:
-            time.sleep(1)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         for observer in event_handler.observers:
             observer.stop()
