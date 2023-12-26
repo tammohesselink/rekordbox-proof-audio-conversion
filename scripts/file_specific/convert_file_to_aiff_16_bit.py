@@ -1,12 +1,12 @@
-
-import sys
 import os
+import sys
 
 from loguru import logger
 
 from audio_conversion_tools.convert_audio import convert_aif_to_16bit, convert_to_aiff, get_file_info
 
 logger.add("auto_convert_downloads.log")
+
 
 def main():
     filename = sys.argv[1]
@@ -29,7 +29,7 @@ def main():
         logger.info(f"Deleted {filename}")
     else:
         logger.info(f"No conversion required for {filename}")
-        
+
 
 if __name__ == "__main__":
     main()
