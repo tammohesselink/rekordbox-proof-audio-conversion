@@ -89,11 +89,6 @@ class FileHandler(FileSystemEventHandler):
         # We lock the file so we don't attempt to run conversion twice at the same time
         self.locked_files.append(file_path)
 
-        # Skip files with ".part" extension
-        if not check_if_file_should_be_converted(file_path):
-            logger.debug(f"File {file_path} is not a lossless file or is already 16-bit AIFF, skipping")
-            return
-
         # If file has been processed or is currently being processed, skip
         if file_path in self.processed_files:
             logger.debug(f"File {file_path} has already been processed, skipping")
@@ -110,6 +105,10 @@ class FileHandler(FileSystemEventHandler):
         logger.info(f"Checking if {file_path} has finished downloading...")
         time.sleep(2)  # Adjust the delay as needed
         if file_path in self.file_sizes and current_size == self.file_sizes[file_path]:
+            if not check_if_file_should_be_converted(file_path):
+                logger.debug(f"File {file_path} is not a lossless file or is already 16-bit AIFF, skipping")
+                return
+
             logger.info(f"Download completed: {file_path}")
             # Mark the file as processed to avoid double execution
             self.processed_files.append(file_path)
