@@ -52,9 +52,6 @@ class FileHandler(FileSystemEventHandler):
         self.file_sizes[file_path] = os.path.getsize(file_path)
 
     def on_modified(self, event):
-        print(self.file_sizes)
-        print(self.processed_files)
-
         if event.is_directory:
             return
 
