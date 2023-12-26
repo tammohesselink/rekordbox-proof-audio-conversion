@@ -30,7 +30,7 @@ class FileHandler(FileSystemEventHandler):
 
         # Start an observer for each downloads folder
         for observer, folder in zip(self.observers, downloads_folders):
-            observer.schedule(self, path=folder, recursive=False)
+            observer.schedule(self, path=folder, recursive=True)
             observer.start()
 
     def get_lock(self, file_path):
