@@ -82,6 +82,13 @@ class FileHandler(FileSystemEventHandler):
 
         file_path = event.src_path
 
+        if file_path in self.locked_files:
+            logger.debug(f"File {file_path} is currently being processed, skipping")
+            return
+        
+        # We lock the file so we don't attempt to run conversion twice at the same time
+        self.locked_files.append(file_path)
+
         # Skip files with ".part" extension
         if not check_if_file_should_be_converted(file_path):
             logger.debug(f"File {file_path} is not a lossless file or is already 16-bit AIFF, skipping")
@@ -92,18 +99,12 @@ class FileHandler(FileSystemEventHandler):
             logger.debug(f"File {file_path} has already been processed, skipping")
             return
 
-        if file_path in self.locked_files:
-            logger.debug(f"File {file_path} is currently being processed, skipping")
-            return
-
         try:
             current_size = os.path.getsize(file_path)
         except FileNotFoundError:
             logger.warning(f"File {file_path} not found, skipping (probably a temporary download file)")
             return
 
-        # We lock the file so we don't attempt to run conversion twice at the same time
-        self.locked_files.append(file_path)
 
         # Check if the file size has remained constant for a certain period
         logger.info(f"Checking if {file_path} has finished downloading...")
