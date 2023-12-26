@@ -12,12 +12,26 @@ from audio_conversion_tools.convert_audio import convert_aif_to_16bit, get_file_
 
 load_dotenv()
 
+# Get the DOWNLOADS_LOCATIONS variable from the environment
+downloads_locations = os.getenv("DOWNLOADS_LOCATIONS")
+
+# Split the string into a list of folder paths
+downloads_folders = downloads_locations.split(",")
+
 class FileHandler(FileSystemEventHandler):
     def __init__(self):
         super().__init__()
         self.file_sizes: dict[str, int] = {}
         self.processed_files: list[str] = []
         self.locks = {}  # Dictionary to store locks for each file
+
+        # Use a separate observer for each downloads folder
+        self.observers = [Observer() for _ in downloads_folders]
+
+        # Start an observer for each downloads folder
+        for observer, folder in zip(self.observers, downloads_folders):
+            observer.schedule(self, path=folder, recursive=False)
+            observer.start()
 
     def get_lock(self, file_path):
         if file_path not in self.locks:
@@ -101,19 +115,14 @@ def run_script_on_new_file(filename: str):
         print(f"Error running the script: {e}")
 
 if __name__ == "__main__":
-    # Replace this with the path to your Downloads folder
-    downloads_folder = os.getenv("DOWNLOADS_LOCATION")
-
-
     event_handler = FileHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path=downloads_folder, recursive=False)
-    observer.start()
 
     try:
         while True:
-            time.sleep(0.5)
+            time.sleep(1)
     except KeyboardInterrupt:
-        observer.stop()
+        for observer in event_handler.observers:
+            observer.stop()
 
-    observer.join()
+        for observer in event_handler.observers:
+            observer.join()
