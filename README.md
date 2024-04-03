@@ -5,6 +5,9 @@ This repo offers tools to convert audio files for Pioneer CDJ use. CDJs (up to 2
 You need to install ffmpeg to run this repo, make sure the command line can run it, check `ffmpeg -h` to verify installation.
 
 ## Rekordbox:
+| ❗  | Please make sure to back up your Rekordbox collection before running the scripts. The backup dialog can be found under "File" > "Library" > "Backup Library" |
+|----|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
 The main functionality of this repo is scanning through your Rekordbox library and finding all unplayable files. It is possible to read the `rekordbox.db` file directly and use that to read through your library, but that contains additional configuration as the file is encrypted.
 
 ### Converting all unplayable files
