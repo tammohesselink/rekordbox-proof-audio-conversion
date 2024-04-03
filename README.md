@@ -1,4 +1,4 @@
-# audio-conversion-tools
+# rekordbox-proof-audio-conversion
 This repo offers tools to convert audio files for Pioneer CDJ use. CDJs (up to 2000NXS2) only offer support for 16 / 24 bit and 44.1 / 48 kHz. With the functionality available here, you should be able to batch convert unplayable files.
 
 ## Installing
