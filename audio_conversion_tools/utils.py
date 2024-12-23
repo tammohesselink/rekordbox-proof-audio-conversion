@@ -6,7 +6,7 @@ def find_files(root_directory, extensions: list[str], recursive: bool = False):
     available_files = (
         _find_files_recursively(root_directory, extensions=extensions)
         if recursive
-        else [f for f in os.listdir() if _get_extension(f) in extensions]
+        else [os.path.join(root_directory, f) for f in os.listdir(root_directory) if _get_extension(f) in extensions]
     )
 
     return available_files

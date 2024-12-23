@@ -45,17 +45,15 @@ def determine_target_sample_rate(sample_rate: int) -> int:
 
 
 def check_sample_rate_allowed(sample_rate: int | None) -> bool:
-    if sample_rate in [44100, 48000]:
-        return True
-    else:
+    if sample_rate is None:
         return False
+    return sample_rate in [44100, 48000]
 
 
 def check_bit_depth_allowed(bit_rate: int | None) -> bool:
-    if bit_rate == 16:
-        return True
-    else:
+    if bit_rate is None:
         return False
+    return bit_rate == 16
 
 
 def convert_aif_to_16bit(file_name: str, temp_location: str | None = None) -> bool:

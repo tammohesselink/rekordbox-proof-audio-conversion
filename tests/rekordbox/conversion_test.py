@@ -12,8 +12,8 @@ from audio_conversion_tools.rekordbox.conversion import (
     convert_flacs,
 )
 
-TEST_WAV_LOCATION = "tests/test_audio/silence.wav"
-TEST_AIFF_LOCATION = "tests/test_audio/silence.aiff"
+TEST_WAV_LOCATION = "tests/test_audio/silence_32bit.wav"
+TEST_AIFF_LOCATION = "tests/test_audio/silence_32bit.aiff"
 
 
 @pytest.fixture
@@ -56,12 +56,12 @@ def archive_folder(tmp_path):
 def test_convert_files(mock_track, mock_aiff_track, archive_folder):
     # Test WAV conversion
     convert_files([mock_track], archive_folder)
-    assert (archive_folder / "silence.wav").exists()
+    assert (archive_folder / "silence_32bit.wav").exists()
     assert (archive_folder / "converted.csv").exists()
 
     # Test AIFF conversion
     convert_files([mock_aiff_track], archive_folder)
-    assert (archive_folder / "silence.aiff").exists()
+    assert (archive_folder / "silence_32bit.aiff").exists()
 
 
 def test_convert_files_nonexistent(archive_folder):
@@ -79,7 +79,7 @@ def test_convert_files_already_exists(mock_track, archive_folder):
 
     convert_files([mock_track], archive_folder)
     # Should not overwrite existing file
-    assert (archive_folder / "silence.wav").exists()
+    assert (archive_folder / "silence_32bit.wav").exists()
 
 
 def test_convert_flacs(mock_flac_track, archive_folder):
@@ -101,7 +101,7 @@ def test_convert_flacs(mock_flac_track, archive_folder):
 
 def test_archive_files(mock_track, archive_folder):
     archive_files([mock_track], archive_folder)
-    assert (archive_folder / "silence.wav").exists()
+    assert (archive_folder / "silence_32bit.wav").exists()
 
 
 def test_add_to_conversion_db(archive_folder):
