@@ -14,8 +14,7 @@ from audio_conversion_tools.convert_audio import (
 )
 
 
-class ConversionError(Exception):
-    ...
+class ConversionError(Exception): ...
 
 
 def convert_files(unplayable_files: list[xml.Track], archive_folder: Path):
@@ -44,7 +43,7 @@ def convert_files(unplayable_files: list[xml.Track], archive_folder: Path):
         if location_within_archive_folder.exists():
             logger.error(
                 f"File {Path(file_location).name} already exists in the archive, will not overwrite the archive. "
-                "Clear your archive manually if you want to confirm this file."
+                "Clear your archive manually if you want to confirm this file.",
             )
             continue
 
@@ -112,7 +111,7 @@ def add_to_conversion_db(
 
     with open(Path(archive_folder) / "converted.csv", "a") as f:
         f.write(
-            f"{current_time},{file_location},{location_within_archive_folder},{input_sample_rate},{output_sample_rate},{input_bit_depth},{output_bit_depth}\n"
+            f"{current_time},{file_location},{location_within_archive_folder},{input_sample_rate},{output_sample_rate},{input_bit_depth},{output_bit_depth}\n",
         )
 
 

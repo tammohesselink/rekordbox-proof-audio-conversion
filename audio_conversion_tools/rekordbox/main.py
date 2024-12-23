@@ -13,7 +13,8 @@ from audio_conversion_tools.rekordbox.create_m3u_playlist import create_m3u_play
 def convert_rekordbox_audio(
     archive_folder: str = typer.Option(...),
     rekordbox_xml_location: str = typer.Argument(
-        None, help="XML file to use in case Rekordbox 6 database does not work."
+        None,
+        help="XML file to use in case Rekordbox 6 database does not work.",
     ),
     lower_bitrate: bool = typer.Option(False, "--lower-bitrate", "-l", help="Lower the bitrate to 16 bit."),
 ):
@@ -30,7 +31,7 @@ def convert_rekordbox_audio(
 
     lossless_files = [track for track in tracks if (any(x in track.Kind.lower() for x in FILE_TYPES_TO_CONVERT))]
     logger.info(
-        f"Read Rekordbox collection, found {len(tracks)} tracks in total of which {len(lossless_files)} WAV / AIFF"
+        f"Read Rekordbox collection, found {len(tracks)} tracks in total of which {len(lossless_files)} WAV / AIFF",
     )
 
     unplayable_files = [
@@ -64,7 +65,7 @@ def convert_rekordbox_audio(
     convert_flacs(flac_files, Path(archive_folder))
     logger.warning(
         f"The converted FLACs can be found in {Path(archive_folder) / 'converted_flacs'},"
-        "but you have to add these to Rekordbox manually as the file type changed"
+        "but you have to add these to Rekordbox manually as the file type changed",
     )
 
 
