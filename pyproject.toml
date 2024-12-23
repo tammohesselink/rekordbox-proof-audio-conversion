@@ -29,6 +29,10 @@ dev = [
 [project.scripts]
 rekordbox-convert-unplayable-files = "audio_conversion_tools.rekordbox.main:main"
 rekordbox-revert-conversion = "audio_conversion_tools.rekordbox.revert_conversion:main"
+convert-to-rekordbox-playable = "audio_conversion_tools.cli.convert_to_rekordbox_playable:main"
+convert-aiff-to-16bit = "audio_conversion_tools.cli.convert_aiff_to_16bit:main"
+convert-lossless-to-aiff = "audio_conversion_tools.cli.convert_lossless_to_aiff:main"
+convert-lossless-to-v0 = "audio_conversion_tools.cli.convert_lossless_to_v0:main"
 
 [build-system]
 requires = ["hatchling"]

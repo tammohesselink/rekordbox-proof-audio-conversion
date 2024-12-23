@@ -173,7 +173,6 @@ def convert_wav_to_16bit(file_name: str, temp_location: str | None = None) -> bo
                 text=True,
                 check=True,
             )
-            # Log the captured output to your log file
             log_file.write(result.stdout)
             log_file.write("\n\n")
             logger.info(
@@ -181,7 +180,6 @@ def convert_wav_to_16bit(file_name: str, temp_location: str | None = None) -> bo
             )
             return True
         except subprocess.CalledProcessError as e:
-            # Log the captured output to your log file
             log_file.write(e.output)
             log_file.write("\n\n")
 
@@ -237,7 +235,6 @@ def convert_to_aiff(file_name: str, output_name: str | None = None) -> bool:
                 text=True,
                 check=True,
             )
-            # Log the captured output to your log file
             log_file.write(result.stdout)
             log_file.write("\n\n")
 
@@ -247,7 +244,6 @@ def convert_to_aiff(file_name: str, output_name: str | None = None) -> bool:
             )
             return True
         except subprocess.CalledProcessError as e:
-            # Log the captured output to your log file
             log_file.write(e.output)
             log_file.write("\n\n")
             logger.error(f"Failed to convert {file_name} to AIFF: {e.output}")
