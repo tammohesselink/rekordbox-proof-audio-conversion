@@ -44,7 +44,7 @@ jobs:
         id: install_dependency_from_cache
         continue-on-error: true
         run: |
-          uv sync
+          uv sync --extra dev
 
       - name: Run tests
         run: uv run pytest .
