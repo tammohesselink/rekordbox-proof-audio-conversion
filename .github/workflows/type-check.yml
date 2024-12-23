@@ -32,4 +32,4 @@ jobs:
           uv sync --extra dev
 
       - name: Run mypy
-        run: uv run mypy .
+        run: uv run mypy audio_conversion_tools

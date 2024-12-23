@@ -42,10 +42,6 @@ build-backend = "hatchling.build"
 strict = true
 
 [[tool.mypy.overrides]]
-module = ["mlflow.*"]
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
 module = [
     "tests.*",
 ]
