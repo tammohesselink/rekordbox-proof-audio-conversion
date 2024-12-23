@@ -100,11 +100,13 @@ def test_convert_aiff() -> None:
 
 
 def test_convert_wav_nonexistent_file() -> None:
-    assert not convert_wav_to_16bit("nonexistent.wav")
+    with pytest.raises(FileNotFoundError):
+        convert_wav_to_16bit("nonexistent.wav")
 
 
 def test_convert_aiff_nonexistent_file() -> None:
-    assert not convert_aif_to_16bit("nonexistent.aiff")
+    with pytest.raises(FileNotFoundError):
+        convert_aif_to_16bit("nonexistent.aiff")
 
 
 def test_convert_to_aiff() -> None:
