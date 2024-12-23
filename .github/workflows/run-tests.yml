@@ -26,6 +26,7 @@ jobs:
           cache-suffix: "optional-suffix"
 
       - name: Install FFmpeg
+        id: install_ffmpeg_from_cache
         run: |
           if [ -d ~/.cache/ffmpeg ]; then
             mkdir -p ~/bin
