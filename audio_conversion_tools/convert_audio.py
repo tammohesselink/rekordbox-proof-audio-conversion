@@ -1,6 +1,7 @@
 import os
 import subprocess
 from pathlib import Path
+from typing import Optional, Tuple
 
 import soundfile as sf
 
@@ -12,7 +13,7 @@ FFMPEG_LOG_LOCATION = Path(__file__).parent.parent / "ffmpeg_log.log"
 class ConversionError(Exception): ...
 
 
-def get_file_info(file_name):
+def get_file_info(file_name: str) -> Tuple[Optional[int], Optional[int]]:
     subtype_mapping = {"PCM_16": 16, "PCM_24": 24, "PCM_32": 32}
 
     try:
@@ -43,21 +44,21 @@ def determine_target_sample_rate(sample_rate: int) -> int:
     return target_sample_rate
 
 
-def check_sample_rate_allowed(sample_rate: int) -> int:
+def check_sample_rate_allowed(sample_rate: int | None) -> bool:
     if sample_rate in [44100, 48000]:
         return True
     else:
         return False
 
 
-def check_bit_depth_allowed(bit_rate: int) -> int:
+def check_bit_depth_allowed(bit_rate: int | None) -> bool:
     if bit_rate == 16:
         return True
     else:
         return False
 
 
-def convert_aif_to_16bit(file_name: str, temp_location: str | None = None):
+def convert_aif_to_16bit(file_name: str, temp_location: str | None = None) -> bool:
     """Converts a given AIFF file to 16-bit AIFF and changes sample rate if required."""
     if temp_location is None:
         temp_location = file_name.rsplit(".", 1)[0] + "_temp.aiff"
@@ -122,7 +123,7 @@ def convert_aif_to_16bit(file_name: str, temp_location: str | None = None):
             return False
 
 
-def convert_wav_to_16bit(file_name: str, temp_location: str | None = None):
+def convert_wav_to_16bit(file_name: str, temp_location: str | None = None) -> bool:
     """Converts a given WAV file to 16-bit AIFF and changes sample rate if required."""
     if temp_location is None:
         temp_location = file_name.rsplit(".", 1)[0] + "_temp.wav"
@@ -192,7 +193,7 @@ def convert_wav_to_16bit(file_name: str, temp_location: str | None = None):
             return False
 
 
-def convert_to_aiff(file_name: str, output_name: str | None = None):
+def convert_to_aiff(file_name: str, output_name: str | None = None) -> bool:
     if not Path(file_name).exists():
         logger.error(f"The file {file_name} does not exist!")
         return False
@@ -253,7 +254,7 @@ def convert_to_aiff(file_name: str, output_name: str | None = None):
             return False
 
 
-def convert_aif_to_mp3_v0(file_name):
+def convert_aif_to_mp3_v0(file_name: str) -> bool:
     output_name = file_name.rsplit(".", 1)[0] + ".mp3"
 
     # Command to use ffmpeg to convert the file to v0 mp3

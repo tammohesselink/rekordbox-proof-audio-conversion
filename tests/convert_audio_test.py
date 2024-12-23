@@ -9,7 +9,7 @@ TEST_TEMP_WAV_LOCATION = "tests/test_audio/silence_temp.wav"
 TEST_TEMP_AIFF_LOCATION = "tests/test_audio/silence_temp.aiff"
 
 
-def test_convert_wav():
+def test_convert_wav() -> None:
     assert convert_wav_to_16bit(
         TEST_WAV_LOCATION,
     )
@@ -26,7 +26,7 @@ def test_convert_wav():
     os.rename(TEST_TEMP_WAV_LOCATION, TEST_WAV_LOCATION)
 
 
-def test_convert_aiff():
+def test_convert_aiff() -> None:
     assert convert_aif_to_16bit(
         TEST_AIFF_LOCATION,
     )
