@@ -13,6 +13,7 @@ from audio_conversion_tools.convert_audio import (
     convert_aif_to_mp3_v0,
     ConversionError,
 )
+import shutil
 
 TEST_FOLDER = Path(__file__).parent
 
@@ -117,7 +118,8 @@ def test_convert_to_aiff() -> None:
     assert sample_rate == 44100
     assert bit_depth == 16
 
-    os.remove(output_name)
+    os.remove(TEST_AIFF_32_BIT_LOCATION)
+    os.rename(output_name, TEST_AIFF_32_BIT_LOCATION)
 
 
 def test_convert_to_aiff_nonexistent_file() -> None:
@@ -136,6 +138,9 @@ def test_convert_aif_to_mp3_v0_nonexistent_file() -> None:
 
 
 def test_convert_wav_already_correct_format() -> None:
+    original_file_backup_path = "temp_audio"
+    shutil.copy2(TEST_WAV_32_BIT_LOCATION, original_file_backup_path)
+
     # First convert to correct format
     assert convert_wav_to_16bit(TEST_WAV_32_BIT_LOCATION)
     
@@ -144,10 +149,13 @@ def test_convert_wav_already_correct_format() -> None:
 
     # Restore original file
     os.remove(TEST_WAV_32_BIT_LOCATION)
-    os.rename(TEST_TEMP_WAV_32_BIT_LOCATION, TEST_WAV_32_BIT_LOCATION)
+    os.rename(original_file_backup_path, TEST_WAV_32_BIT_LOCATION)
 
 
 def test_convert_aiff_already_correct_format() -> None:
+    original_file_backup_path = "temp_audio"
+    shutil.copy2(TEST_AIFF_32_BIT_LOCATION, original_file_backup_path)
+
     # First convert to correct format
     assert convert_aif_to_16bit(TEST_AIFF_32_BIT_LOCATION)
     
@@ -156,4 +164,4 @@ def test_convert_aiff_already_correct_format() -> None:
 
     # Restore original file
     os.remove(TEST_AIFF_32_BIT_LOCATION)
-    os.rename(TEST_TEMP_AIFF_32_BIT_LOCATION, TEST_AIFF_32_BIT_LOCATION)
+    os.rename(original_file_backup_path, TEST_AIFF_32_BIT_LOCATION)
