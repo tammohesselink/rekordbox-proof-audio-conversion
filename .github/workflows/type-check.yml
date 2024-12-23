@@ -1,0 +1,35 @@
+name: Type Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
+        with:
+          version: "0.4.4"
+          enable-cache: true
+          cache-suffix: "optional-suffix"  
+
+      - name: Install dependencies
+        id: install_dependency_from_cache
+        continue-on-error: true
+        run: |
+          uv sync --extra dev
+  
+      - name: Run mypy
+        run: uv run mypy .

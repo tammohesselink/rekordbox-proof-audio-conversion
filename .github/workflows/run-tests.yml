@@ -18,15 +18,15 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
         with:
-          version: "1.5.1"
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
+          version: "0.4.4"
+          enable-cache: true
+          cache-suffix: "optional-suffix"
 
       - name: Install FFmpeg
+        id: install_ffmpeg_from_cache
         run: |
           if [ -d ~/.cache/ffmpeg ]; then
             mkdir -p ~/bin
@@ -44,7 +44,7 @@ jobs:
         id: install_dependency_from_cache
         continue-on-error: true
         run: |
-          poetry install --sync
+          uv sync --extra dev
 
       - name: Run tests
-        run: source .venv/bin/activate && pytest .
+        run: uv run pytest .
