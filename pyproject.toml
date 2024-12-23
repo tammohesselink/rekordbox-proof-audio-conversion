@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "audio_conversion_tools"}]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.13"
+python = ">=3.10"
 pre-commit = "^3.4.0"
 pandas = "^2.1.2"
 pyrekordbox = "^0.2.2"
@@ -47,3 +47,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 rekordbox-convert-unplayable-files = "audio_conversion_tools.rekordbox.main:main"
 rekordbox-revert-conversion = "audio_conversion_tools.rekordbox.revert_conversion:main"
+convert-to-rekordbox-playable = "audio_conversion_tools.cli.convert_to_rekordbox_playable:main"
+convert-aiff-to-16bit = "audio_conversion_tools.cli.convert_aiff_to_16bit:main"
+convert-lossless-to-aiff = "audio_conversion_tools.cli.convert_lossless_to_aiff:main"
+convert-lossless-to-v0 = "audio_conversion_tools.cli.convert_lossless_to_v0:main"
