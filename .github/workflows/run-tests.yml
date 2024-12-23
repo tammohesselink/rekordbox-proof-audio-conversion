@@ -43,7 +43,7 @@ jobs:
         id: install_dependency_from_cache
         continue-on-error: true
         run: |
-          poetry install --sync
+          uv sync
 
       - name: Run tests
-        run: source .venv/bin/activate && pytest .
+        run: uv run pytest .
