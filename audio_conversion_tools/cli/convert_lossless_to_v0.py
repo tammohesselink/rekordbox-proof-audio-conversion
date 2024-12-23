@@ -3,7 +3,8 @@ import os
 from audio_conversion_tools.convert_audio import convert_aif_to_mp3_v0
 from audio_conversion_tools.logging import logger
 
-if __name__ == "__main__":
+
+def main():
     delete_files = input("Do you want to delete the files after conversion? y/n\n")
 
     if delete_files not in ["y", "n"]:
@@ -27,3 +28,7 @@ if __name__ == "__main__":
                 logger.info(f"Deleted {file_name}")
 
     input("Finished! Press any key to exit.")
+
+
+if __name__ == "__main__":
+    main()
