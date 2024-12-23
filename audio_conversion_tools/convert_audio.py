@@ -103,13 +103,12 @@ def convert_aif_to_16bit(file_name: str, temp_location: str | None = None):
                 stderr=subprocess.STDOUT,
                 text=True,
                 check=True,
-                universal_newlines=True,
             )
             # Log the captured output to your log file
             log_file.write(result.stdout)
             log_file.write("\n\n")
             logger.info(
-                f"Converted {file_name} from {bit_depth} bit / {sample_rate}Hz to 16 bit / {target_sample_rate}Hz"
+                f"Converted {file_name} from {bit_depth} bit / {sample_rate}Hz to 16 bit / {target_sample_rate}Hz",
             )
             return True
         except subprocess.CalledProcessError as e:
@@ -119,7 +118,7 @@ def convert_aif_to_16bit(file_name: str, temp_location: str | None = None):
             os.rename(temp_location, file_name)  # Move the temp file back to original name if failed
             logger.error(
                 f"Failed to convert {file_name} to 16-bit AIFF with target sample rate {target_sample_rate}Hz: :"
-                f" {e.output}"
+                f" {e.output}",
             )
             return False
 
@@ -173,13 +172,12 @@ def convert_wav_to_16bit(file_name: str, temp_location: str | None = None):
                 stderr=subprocess.STDOUT,
                 text=True,
                 check=True,
-                universal_newlines=True,
             )
             # Log the captured output to your log file
             log_file.write(result.stdout)
             log_file.write("\n\n")
             logger.info(
-                f"Converted {file_name} from {bit_depth} bit / {sample_rate}Hz to 16 bit / {target_sample_rate}Hz"
+                f"Converted {file_name} from {bit_depth} bit / {sample_rate}Hz to 16 bit / {target_sample_rate}Hz",
             )
             return True
         except subprocess.CalledProcessError as e:
@@ -190,7 +188,7 @@ def convert_wav_to_16bit(file_name: str, temp_location: str | None = None):
             os.rename(temp_location, file_name)  # Move the temp file back to original name if failed
             logger.error(
                 f"Failed to convert {file_name} to 16-bit WAV with target sample rate {target_sample_rate}Hz: :"
-                f" {e.output}"
+                f" {e.output}",
             )
             return False
 
@@ -238,7 +236,6 @@ def convert_to_aiff(file_name: str, output_name: str | None = None):
                 stderr=subprocess.STDOUT,
                 text=True,
                 check=True,
-                universal_newlines=True,
             )
             # Log the captured output to your log file
             log_file.write(result.stdout)
@@ -246,7 +243,7 @@ def convert_to_aiff(file_name: str, output_name: str | None = None):
 
             logger.info(
                 f"Converted {file_name} ({(sample_rate / 1000):.1f}kHz / {bit_depth} bit) to AIFF"
-                f" ({(target_sample_rate / 1000):.1f}kHz / 16 bit)"
+                f" ({(target_sample_rate / 1000):.1f}kHz / 16 bit)",
             )
             return True
         except subprocess.CalledProcessError as e:
@@ -282,7 +279,6 @@ def convert_aif_to_mp3_v0(file_name):
                 stderr=subprocess.STDOUT,
                 text=True,
                 check=True,
-                universal_newlines=True,
             )
             # Log the captured output to your log file
             log_file.write(result.stdout)

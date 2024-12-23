@@ -44,7 +44,7 @@ def main():
             files_to_convert.append(filename)
 
     logger.info(
-        f"Found {len(available_files)} AIFF files in total, {len(files_to_convert)} of which need to be converted"
+        f"Found {len(available_files)} AIFF files in total, {len(files_to_convert)} of which need to be converted",
     )
     if len(files_to_convert) > 0:
         logger.info(f"Converting all non 16-bit .aif and .aiff files in the current folder: {files_to_convert}")
