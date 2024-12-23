@@ -16,18 +16,23 @@ from audio_conversion_tools.convert_audio import (
 
 TEST_FOLDER = Path(__file__).parent
 
-TEST_WAV_LOCATION = TEST_FOLDER / "test_audio" / "silence.wav"
-TEST_AIFF_LOCATION = TEST_FOLDER / "test_audio" / "silence.aiff"
-TEST_TEMP_WAV_LOCATION = TEST_FOLDER / "test_audio" / "silence_temp.wav"
-TEST_TEMP_AIFF_LOCATION = TEST_FOLDER / "test_audio" / "silence_temp.aiff"
+TEST_WAV_32_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_32bit.wav"
+TEST_AIFF_32_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_32bit.aiff"
+TEST_TEMP_WAV_32_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_32bit_temp.wav"
+TEST_TEMP_AIFF_32_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_32bit_temp.aiff"
+
+TEST_WAV_16_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_16bit.wav"
+TEST_AIFF_16_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_16bit.aiff"
+TEST_TEMP_WAV_16_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_16bit_temp.wav"
+TEST_TEMP_AIFF_16_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_16bit_temp.aiff"
 
 
 def test_get_file_info() -> None:
-    sample_rate, bit_depth = get_file_info(TEST_WAV_LOCATION)
+    sample_rate, bit_depth = get_file_info(TEST_WAV_32_BIT_LOCATION)
     assert sample_rate == 88200
     assert bit_depth == 32
 
-    sample_rate, bit_depth = get_file_info(TEST_AIFF_LOCATION)
+    sample_rate, bit_depth = get_file_info(TEST_AIFF_32_BIT_LOCATION)
     assert sample_rate == 88200
     assert bit_depth == 32
 
@@ -65,33 +70,33 @@ def test_check_bit_depth_allowed() -> None:
 
 
 def test_convert_wav() -> None:
-    assert convert_wav_to_16bit(TEST_WAV_LOCATION)
+    assert convert_wav_to_16bit(TEST_WAV_32_BIT_LOCATION)
 
-    original_sample_rate, original_bit_rate = get_file_info(TEST_TEMP_WAV_LOCATION)
-    converted_sample_rate, converted_bit_rate = get_file_info(TEST_WAV_LOCATION)
+    original_sample_rate, original_bit_rate = get_file_info(TEST_TEMP_WAV_32_BIT_LOCATION)
+    converted_sample_rate, converted_bit_rate = get_file_info(TEST_WAV_32_BIT_LOCATION)
 
     assert original_sample_rate == 88200
     assert original_bit_rate == 32
     assert converted_sample_rate == 44100
     assert converted_bit_rate == 16
 
-    os.remove(TEST_WAV_LOCATION)
-    os.rename(TEST_TEMP_WAV_LOCATION, TEST_WAV_LOCATION)
+    os.remove(TEST_WAV_32_BIT_LOCATION)
+    os.rename(TEST_TEMP_WAV_32_BIT_LOCATION, TEST_WAV_32_BIT_LOCATION)
 
 
 def test_convert_aiff() -> None:
-    assert convert_aif_to_16bit(TEST_AIFF_LOCATION)
+    assert convert_aif_to_16bit(TEST_AIFF_32_BIT_LOCATION)
 
-    original_sample_rate, original_bit_rate = get_file_info(TEST_TEMP_AIFF_LOCATION)
-    converted_sample_rate, converted_bit_rate = get_file_info(TEST_AIFF_LOCATION)
+    original_sample_rate, original_bit_rate = get_file_info(TEST_TEMP_AIFF_32_BIT_LOCATION)
+    converted_sample_rate, converted_bit_rate = get_file_info(TEST_AIFF_32_BIT_LOCATION)
 
     assert original_sample_rate == 88200
     assert original_bit_rate == 32
     assert converted_sample_rate == 44100
     assert converted_bit_rate == 16
 
-    os.remove(TEST_AIFF_LOCATION)
-    os.rename(TEST_TEMP_AIFF_LOCATION, TEST_AIFF_LOCATION)
+    os.remove(TEST_AIFF_32_BIT_LOCATION)
+    os.rename(TEST_TEMP_AIFF_32_BIT_LOCATION, TEST_AIFF_32_BIT_LOCATION)
 
 
 def test_convert_wav_nonexistent_file() -> None:
@@ -103,8 +108,8 @@ def test_convert_aiff_nonexistent_file() -> None:
 
 
 def test_convert_to_aiff() -> None:
-    output_name = str(TEST_WAV_LOCATION).replace(".wav", "_converted.aiff")
-    assert convert_to_aiff(TEST_WAV_LOCATION, output_name)
+    output_name = str(TEST_WAV_32_BIT_LOCATION).replace(".wav", "_converted.aiff")
+    assert convert_to_aiff(TEST_WAV_32_BIT_LOCATION, output_name)
 
     sample_rate, bit_depth = get_file_info(output_name)
     assert sample_rate == 44100
@@ -118,8 +123,8 @@ def test_convert_to_aiff_nonexistent_file() -> None:
 
 
 def test_convert_aif_to_mp3_v0() -> None:
-    assert convert_aif_to_mp3_v0(TEST_AIFF_LOCATION)
-    output_name = str(TEST_AIFF_LOCATION).replace(".aiff", ".mp3")
+    assert convert_aif_to_mp3_v0(TEST_AIFF_32_BIT_LOCATION)
+    output_name = str(TEST_AIFF_32_BIT_LOCATION).replace(".aiff", ".mp3")
     assert Path(output_name).exists()
     os.remove(output_name)
 
@@ -130,23 +135,23 @@ def test_convert_aif_to_mp3_v0_nonexistent_file() -> None:
 
 def test_convert_wav_already_correct_format() -> None:
     # First convert to correct format
-    assert convert_wav_to_16bit(TEST_WAV_LOCATION)
+    assert convert_wav_to_16bit(TEST_WAV_32_BIT_LOCATION)
     
     # Try converting again - should return False as no conversion needed
-    assert not convert_wav_to_16bit(TEST_WAV_LOCATION)
+    assert not convert_wav_to_16bit(TEST_WAV_32_BIT_LOCATION)
 
     # Restore original file
-    os.remove(TEST_WAV_LOCATION)
-    os.rename(TEST_TEMP_WAV_LOCATION, TEST_WAV_LOCATION)
+    os.remove(TEST_WAV_32_BIT_LOCATION)
+    os.rename(TEST_TEMP_WAV_32_BIT_LOCATION, TEST_WAV_32_BIT_LOCATION)
 
 
 def test_convert_aiff_already_correct_format() -> None:
     # First convert to correct format
-    assert convert_aif_to_16bit(TEST_AIFF_LOCATION)
+    assert convert_aif_to_16bit(TEST_AIFF_32_BIT_LOCATION)
     
     # Try converting again - should return False as no conversion needed
-    assert not convert_aif_to_16bit(TEST_AIFF_LOCATION)
+    assert not convert_aif_to_16bit(TEST_AIFF_32_BIT_LOCATION)
 
     # Restore original file
-    os.remove(TEST_AIFF_LOCATION)
-    os.rename(TEST_TEMP_AIFF_LOCATION, TEST_AIFF_LOCATION)
+    os.remove(TEST_AIFF_32_BIT_LOCATION)
+    os.rename(TEST_TEMP_AIFF_32_BIT_LOCATION, TEST_AIFF_32_BIT_LOCATION)
