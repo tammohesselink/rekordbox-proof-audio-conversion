@@ -32,30 +32,3 @@ rekordbox-revert-conversion = "audio_conversion_tools.rekordbox.revert_conversio
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.ruff]
-line-length = 120
-target-version = "py311"
-
-select = ["ALL"]
-ignore = [
-    "D",  # Ignore docstring rules
-    "ANN", # Ignore type annotation rules
-    "FBT", # Ignore boolean trap rules
-    "ERA", # Ignore eradicate rules
-    "INP", # Ignore init-py rules
-    "TCH", # Ignore type-checking rules
-    "A",   # Ignore builtins shadowing rules
-]
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
-
-[tool.autoflake]
-in-place = true
-remove-unused-variables = true
-remove-all-unused-imports = true
-exclude = ['test_*.py', '__init__.py']

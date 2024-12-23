@@ -14,8 +14,7 @@ from audio_conversion_tools.convert_audio import (
 )
 
 
-class ConversionError(Exception):
-    ...
+class ConversionError(Exception): ...
 
 
 def convert_files(unplayable_files: list[xml.Track], archive_folder: Path):

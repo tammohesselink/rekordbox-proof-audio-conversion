@@ -9,8 +9,7 @@ from audio_conversion_tools.logging import logger
 FFMPEG_LOG_LOCATION = Path(__file__).parent.parent / "ffmpeg_log.log"
 
 
-class ConversionError(Exception):
-    ...
+class ConversionError(Exception): ...
 
 
 def get_file_info(file_name):
