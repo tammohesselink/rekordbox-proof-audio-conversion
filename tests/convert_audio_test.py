@@ -14,10 +14,12 @@ from audio_conversion_tools.convert_audio import (
     ConversionError,
 )
 
-TEST_WAV_LOCATION = "tests/test_audio/silence.wav"
-TEST_AIFF_LOCATION = "tests/test_audio/silence.aiff"
-TEST_TEMP_WAV_LOCATION = "tests/test_audio/silence_temp.wav"
-TEST_TEMP_AIFF_LOCATION = "tests/test_audio/silence_temp.aiff"
+TEST_FOLDER = Path(__file__).parent
+
+TEST_WAV_LOCATION = TEST_FOLDER / "test_audio" / "silence.wav"
+TEST_AIFF_LOCATION = TEST_FOLDER / "test_audio" / "silence.aiff"
+TEST_TEMP_WAV_LOCATION = TEST_FOLDER / "test_audio" / "silence_temp.wav"
+TEST_TEMP_AIFF_LOCATION = TEST_FOLDER / "test_audio" / "silence_temp.aiff"
 
 
 def test_get_file_info() -> None:
@@ -101,7 +103,7 @@ def test_convert_aiff_nonexistent_file() -> None:
 
 
 def test_convert_to_aiff() -> None:
-    output_name = TEST_WAV_LOCATION.replace(".wav", "_converted.aiff")
+    output_name = str(TEST_WAV_LOCATION).replace(".wav", "_converted.aiff")
     assert convert_to_aiff(TEST_WAV_LOCATION, output_name)
 
     sample_rate, bit_depth = get_file_info(output_name)
@@ -117,7 +119,7 @@ def test_convert_to_aiff_nonexistent_file() -> None:
 
 def test_convert_aif_to_mp3_v0() -> None:
     assert convert_aif_to_mp3_v0(TEST_AIFF_LOCATION)
-    output_name = TEST_AIFF_LOCATION.replace(".aiff", ".mp3")
+    output_name = str(TEST_AIFF_LOCATION).replace(".aiff", ".mp3")
     assert Path(output_name).exists()
     os.remove(output_name)
 

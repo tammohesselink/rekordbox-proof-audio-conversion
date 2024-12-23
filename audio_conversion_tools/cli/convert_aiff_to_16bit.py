@@ -57,7 +57,7 @@ def convert_aiff_to_16_bit(recursive: bool) -> None:
 
         for file_name in files_to_convert:
             if convert_aif_to_16bit(file_name) and delete_files:
-                temp_name = file_name.rsplit(".", 1)[0] + "_temp.aiff"
+                temp_name = str(file_name).rsplit(".", 1)[0] + "_temp.aiff"
                 os.remove(temp_name)
                 logger.info(f"Deleted temp file {temp_name}")
 
