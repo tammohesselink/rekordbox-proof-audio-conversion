@@ -23,6 +23,6 @@ def _find_files_recursively(root_directory, extensions: list[str]):
 
 def _get_extension(file_name):
     # Special case for hidden files (starting with a dot)
-    if file_name.startswith('.'):
+    if file_name.startswith("."):
         return file_name
     return pathlib.Path(file_name).suffix.lower()

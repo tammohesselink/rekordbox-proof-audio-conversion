@@ -1,19 +1,19 @@
 import os
-import pytest
+import shutil
 from pathlib import Path
 
+import pytest
+
 from audio_conversion_tools.convert_audio import (
-    convert_aif_to_16bit,
-    convert_wav_to_16bit,
-    get_file_info,
-    determine_target_sample_rate,
-    check_sample_rate_allowed,
     check_bit_depth_allowed,
-    convert_to_aiff,
+    check_sample_rate_allowed,
+    convert_aif_to_16bit,
     convert_aif_to_mp3_v0,
-    ConversionError,
+    convert_to_aiff,
+    convert_wav_to_16bit,
+    determine_target_sample_rate,
+    get_file_info,
 )
-import shutil
 
 TEST_FOLDER = Path(__file__).parent
 
@@ -118,9 +118,6 @@ def test_convert_to_aiff() -> None:
     assert sample_rate == 44100
     assert bit_depth == 16
 
-    os.remove(TEST_AIFF_32_BIT_LOCATION)
-    os.rename(output_name, TEST_AIFF_32_BIT_LOCATION)
-
 
 def test_convert_to_aiff_nonexistent_file() -> None:
     assert not convert_to_aiff("nonexistent.wav")
@@ -143,7 +140,7 @@ def test_convert_wav_already_correct_format() -> None:
 
     # First convert to correct format
     assert convert_wav_to_16bit(TEST_WAV_32_BIT_LOCATION)
-    
+
     # Try converting again - should return False as no conversion needed
     assert not convert_wav_to_16bit(TEST_WAV_32_BIT_LOCATION)
 
@@ -158,7 +155,7 @@ def test_convert_aiff_already_correct_format() -> None:
 
     # First convert to correct format
     assert convert_aif_to_16bit(TEST_AIFF_32_BIT_LOCATION)
-    
+
     # Try converting again - should return False as no conversion needed
     assert not convert_aif_to_16bit(TEST_AIFF_32_BIT_LOCATION)
 

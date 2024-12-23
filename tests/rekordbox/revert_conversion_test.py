@@ -1,5 +1,4 @@
 import csv
-from pathlib import Path
 
 import pytest
 
@@ -25,40 +24,44 @@ def sample_csv(archive_folder, destination_folder):
     # Create test files in archive
     (archive_folder / "test1.wav").touch()
     (archive_folder / "test2.aiff").touch()
-    
+
     # Create CSV file with conversion records
     csv_path = archive_folder / "converted.csv"
     with open(csv_path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
         # timestamp, original_location, archive_location, input_sr, output_sr, input_bd, output_bd
-        writer.writerow([
-            "2024-01-01 12:00:00",
-            str(destination_folder / "test1.wav"),
-            str(archive_folder / "test1.wav"),
-            "88200",
-            "44100",
-            "32",
-            "16"
-        ])
-        writer.writerow([
-            "2024-01-01 12:00:00",
-            str(destination_folder / "test2.aiff"),
-            str(archive_folder / "test2.aiff"),
-            "88200",
-            "44100",
-            "32",
-            "16"
-        ])
+        writer.writerow(
+            [
+                "2024-01-01 12:00:00",
+                str(destination_folder / "test1.wav"),
+                str(archive_folder / "test1.wav"),
+                "88200",
+                "44100",
+                "32",
+                "16",
+            ]
+        )
+        writer.writerow(
+            [
+                "2024-01-01 12:00:00",
+                str(destination_folder / "test2.aiff"),
+                str(archive_folder / "test2.aiff"),
+                "88200",
+                "44100",
+                "32",
+                "16",
+            ]
+        )
     return csv_path
 
 
 def test_restore_files(sample_csv, archive_folder, destination_folder):
     restore_files_from_csv(sample_csv)
-    
+
     # Check files were moved to destination
     assert (destination_folder / "test1.wav").exists()
     assert (destination_folder / "test2.aiff").exists()
-    
+
     # Check files were removed from archive
     assert not (archive_folder / "test1.wav").exists()
     assert not (archive_folder / "test2.aiff").exists()
@@ -69,16 +72,18 @@ def test_restore_files_missing_archive_file(archive_folder, destination_folder):
     csv_path = archive_folder / "converted.csv"
     with open(csv_path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow([
-            "2024-01-01 12:00:00",
-            str(destination_folder / "missing.wav"),
-            str(archive_folder / "missing.wav"),
-            "88200",
-            "44100",
-            "32",
-            "16"
-        ])
-    
+        writer.writerow(
+            [
+                "2024-01-01 12:00:00",
+                str(destination_folder / "missing.wav"),
+                str(archive_folder / "missing.wav"),
+                "88200",
+                "44100",
+                "32",
+                "16",
+            ]
+        )
+
     # Should not raise an error for missing files
     restore_files_from_csv(csv_path)
     assert not (destination_folder / "missing.wav").exists()
@@ -89,7 +94,7 @@ def test_restore_files_invalid_csv(tmp_path):
     csv_path = tmp_path / "invalid.csv"
     with open(csv_path, "w") as f:
         f.write("invalid,csv,format\n")
-    
+
     # Should handle invalid CSV gracefully
     restore_files_from_csv(csv_path)
 
@@ -98,7 +103,7 @@ def test_restore_files_empty_csv(tmp_path):
     # Create empty CSV
     csv_path = tmp_path / "empty.csv"
     csv_path.touch()
-    
+
     # Should handle empty CSV gracefully
     restore_files_from_csv(csv_path)
 
@@ -106,7 +111,7 @@ def test_restore_files_empty_csv(tmp_path):
 def test_restore_files_destination_exists(archive_folder, destination_folder, sample_csv):
     # Create file at destination to simulate existing file
     (destination_folder / "test1.wav").touch()
-    
+
     # Should overwrite existing file
     restore_files_from_csv(sample_csv)
     assert (destination_folder / "test1.wav").exists()

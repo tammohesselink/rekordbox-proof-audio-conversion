@@ -198,7 +198,7 @@ def convert_to_aiff(file_name: str, output_name: str | None = None) -> bool:
 
     if output_name is None:
         output_name = str(file_name).rsplit(".", 1)[0] + ".aiff"
-    
+
     # Create output directory if it doesn't exist
     output_path = Path(output_name)
     output_path.parent.mkdir(parents=True, exist_ok=True)

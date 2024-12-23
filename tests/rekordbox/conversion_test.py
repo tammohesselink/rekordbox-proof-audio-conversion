@@ -1,5 +1,3 @@
-import datetime
-import shutil
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -7,11 +5,11 @@ import pytest
 from pyrekordbox import xml
 
 from audio_conversion_tools.rekordbox.conversion import (
+    _calculate_bit_depth,
+    add_to_conversion_db,
+    archive_files,
     convert_files,
     convert_flacs,
-    archive_files,
-    add_to_conversion_db,
-    _calculate_bit_depth,
 )
 
 TEST_WAV_LOCATION = "tests/test_audio/silence.wav"
@@ -70,7 +68,7 @@ def test_convert_files_nonexistent(archive_folder):
     track = Mock(spec=xml.Track)
     track.Location = "nonexistent.wav"
     track.Kind = "WAV"
-    
+
     convert_files([track], archive_folder)
     assert not (archive_folder / "nonexistent.wav").exists()
 
@@ -78,7 +76,7 @@ def test_convert_files_nonexistent(archive_folder):
 def test_convert_files_already_exists(mock_track, archive_folder):
     # Create a file in archive to simulate existing file
     (archive_folder / "silence.wav").touch()
-    
+
     convert_files([mock_track], archive_folder)
     # Should not overwrite existing file
     assert (archive_folder / "silence.wav").exists()
@@ -87,14 +85,14 @@ def test_convert_files_already_exists(mock_track, archive_folder):
 def test_convert_flacs(mock_flac_track, archive_folder):
     flac_folder = archive_folder / "converted_flacs"
     flac_folder.mkdir()
-    
+
     # Create a test FLAC file
     test_flac = Path("tests/test_audio/test.flac")
     test_flac.parent.mkdir(parents=True, exist_ok=True)
     test_flac.touch()
 
     convert_flacs([mock_flac_track], archive_folder)
-    
+
     expected_output = flac_folder / "test.aiff"
     assert not expected_output.exists()  # Should fail since test.flac is empty
 
@@ -109,7 +107,7 @@ def test_archive_files(mock_track, archive_folder):
 def test_add_to_conversion_db(archive_folder):
     file_location = Path("test.wav")
     archive_location = archive_folder / "test.wav"
-    
+
     add_to_conversion_db(
         archive_folder=archive_folder,
         file_location=file_location,
@@ -119,10 +117,10 @@ def test_add_to_conversion_db(archive_folder):
         output_sample_rate=44100,
         output_bit_depth=16,
     )
-    
+
     db_file = archive_folder / "converted.csv"
     assert db_file.exists()
-    
+
     content = db_file.read_text()
     assert str(file_location) in content
     assert str(archive_location) in content
