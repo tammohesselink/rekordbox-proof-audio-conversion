@@ -23,13 +23,13 @@ jobs:
         with:
           version: "0.4.4"
           enable-cache: true
-          cache-suffix: "optional-suffix"  
+          cache-suffix: "optional-suffix"
 
       - name: Install dependencies
         id: install_dependency_from_cache
         continue-on-error: true
         run: |
           uv sync --extra dev
-  
+
       - name: Run mypy
         run: uv run mypy .
