@@ -18,13 +18,12 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
         with:
-          version: "1.5.1"
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
+          version: "0.4.4"
+          enable-cache: true
+          cache-suffix: "optional-suffix"
 
       - name: Install FFmpeg
         run: |
