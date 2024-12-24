@@ -29,7 +29,6 @@ jobs:
         uses: FedericoCarboni/setup-ffmpeg@v3
         with:
           ffmpeg-version: 'latest'
-          cache: true
   
       - name: Install dependencies
         id: install_dependency_from_cache
