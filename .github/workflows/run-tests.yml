@@ -28,7 +28,7 @@ jobs:
       - name: Set up FFmpeg
         uses: FedericoCarboni/setup-ffmpeg@v3
         with:
-          ffmpeg-version: 'latest'
+          ffmpeg-version: release
   
       - name: Install dependencies
         id: install_dependency_from_cache
