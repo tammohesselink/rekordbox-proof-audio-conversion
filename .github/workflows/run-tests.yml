@@ -52,5 +52,5 @@ jobs:
         uses: orgoro/coverage@v3.1
         with:
           coverageFile: coverage.xml
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           thresholdAll: 0.9
