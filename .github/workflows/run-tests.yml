@@ -25,20 +25,25 @@ jobs:
           enable-cache: true
           cache-suffix: "optional-suffix"
 
+      - name: Cache FFmpeg
+        id: cache-ffmpeg
+        uses: actions/cache@v3
+        with:
+          path: |
+            /usr/bin/ffmpeg
+            /usr/bin/ffprobe
+            /usr/lib/x86_64-linux-gnu/libavcodec*
+            /usr/lib/x86_64-linux-gnu/libavformat*
+            /usr/lib/x86_64-linux-gnu/libavutil*
+            /usr/lib/x86_64-linux-gnu/libswresample*
+          key: ${{ runner.os }}-ffmpeg-${{ hashFiles('/usr/bin/ffmpeg') }}
+
       - name: Install FFmpeg
-        id: install_ffmpeg_from_cache
+        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
         run: |
-          if [ -d ~/.cache/ffmpeg ]; then
-            mkdir -p ~/bin
-            cp -a ~/.cache/ffmpeg/. ~/bin/
-          else
-            sudo apt-get update
-            sudo apt-get install -y ffmpeg
-            mkdir -p ~/.cache/ffmpeg
-            cp -a /usr/bin/. ~/.cache/ffmpeg/
-            mkdir -p ~/bin
-            cp -a /usr/bin/. ~/bin/
-          fi
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          sudo ldconfig
 
       - name: Install dependencies
         id: install_dependency_from_cache
@@ -46,5 +51,12 @@ jobs:
         run: |
           uv sync --extra dev
 
-      - name: Run tests
-        run: uv run pytest .
+      - name: Run tests with coverage
+        run: |
+          uv run pytest --cov=. --cov-report=xml --cov-report=term
+  
+      - name: Upload coverage to GitHub
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml
