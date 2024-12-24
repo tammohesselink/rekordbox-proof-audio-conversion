@@ -25,16 +25,6 @@ jobs:
           enable-cache: true
           cache-suffix: "optional-suffix"
 
-
-      - name: Restore FFmpeg from Cache
-        uses: actions/cache@v2
-        id: cache-ffmpeg
-        with:
-          path: .ffmpeg
-          key: ${{ runner.os }}-ffmpeg-cache-v1
-          restore-keys: |
-            ${{ runner.os }}-ffmpeg-cache-
-
       - name: Install FFmpeg
         run: |
           if [ ! -d ".ffmpeg/bin" ]; then
@@ -47,13 +37,6 @@ jobs:
           fi
           export PATH="$PWD/.ffmpeg/bin:$PATH"
           export LD_LIBRARY_PATH="$PWD/.ffmpeg/lib:$LD_LIBRARY_PATH"
-
-      - name: Cache FFmpeg
-        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
-        uses: actions/cache@v2
-        with:
-          path: .ffmpeg
-          key: ${{ runner.os }}-ffmpeg-cache-v1
 
       - name: Install dependencies
         id: install_dependency_from_cache
