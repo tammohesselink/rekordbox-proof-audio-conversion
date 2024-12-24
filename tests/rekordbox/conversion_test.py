@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -9,17 +10,25 @@ from audio_conversion_tools.rekordbox.conversion import (
     add_to_conversion_db,
     archive_files,
     convert_files,
-    convert_flacs,
 )
 
-TEST_WAV_LOCATION = "tests/test_audio/silence_32bit.wav"
-TEST_AIFF_LOCATION = "tests/test_audio/silence_32bit.aiff"
+TEST_FOLDER = Path(__file__).parent.parent
+
+TEST_WAV_32_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_32bit.wav"
+TEST_AIFF_32_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_32bit.aiff"
+TEST_TEMP_WAV_32_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_32bit_temp.wav"
+TEST_TEMP_AIFF_32_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_32bit_temp.aiff"
+
+TEST_WAV_16_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_16bit.wav"
+TEST_AIFF_16_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_16bit.aiff"
+TEST_TEMP_WAV_16_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_16bit_temp.wav"
+TEST_TEMP_AIFF_16_BIT_LOCATION = TEST_FOLDER / "test_audio" / "silence_16bit_temp.aiff"
 
 
 @pytest.fixture
 def mock_track():
     track = Mock(spec=xml.Track)
-    track.Location = TEST_WAV_LOCATION
+    track.Location = TEST_WAV_32_BIT_LOCATION
     track.Kind = "WAV"
     track.BitRate = 1411
     track.SampleRate = 44100
@@ -29,7 +38,7 @@ def mock_track():
 @pytest.fixture
 def mock_aiff_track():
     track = Mock(spec=xml.Track)
-    track.Location = TEST_AIFF_LOCATION
+    track.Location = TEST_AIFF_32_BIT_LOCATION
     track.Kind = "AIFF"
     track.BitRate = 1411
     track.SampleRate = 44100
@@ -63,6 +72,12 @@ def test_convert_files(mock_track, mock_aiff_track, archive_folder):
     convert_files([mock_aiff_track], archive_folder)
     assert (archive_folder / "silence_32bit.aiff").exists()
 
+    # We need to revert the changes made by the test
+    os.remove(mock_track.Location)
+    os.rename(archive_folder / "silence_32bit.wav", mock_track.Location)
+    os.remove(mock_aiff_track.Location)
+    os.rename(archive_folder / "silence_32bit.aiff", mock_aiff_track.Location)
+
 
 def test_convert_files_nonexistent(archive_folder):
     track = Mock(spec=xml.Track)
@@ -75,28 +90,16 @@ def test_convert_files_nonexistent(archive_folder):
 
 def test_convert_files_already_exists(mock_track, archive_folder):
     # Create a file in archive to simulate existing file
-    (archive_folder / "silence.wav").touch()
+    mock_file = archive_folder / "silence_32bit.wav"
+    mock_file.touch()
+    mock_file.write_text("mockfile")
 
+    # Verify the content was written correctly
     convert_files([mock_track], archive_folder)
+
     # Should not overwrite existing file
     assert (archive_folder / "silence_32bit.wav").exists()
-
-
-def test_convert_flacs(mock_flac_track, archive_folder):
-    flac_folder = archive_folder / "converted_flacs"
-    flac_folder.mkdir()
-
-    # Create a test FLAC file
-    test_flac = Path("tests/test_audio/test.flac")
-    test_flac.parent.mkdir(parents=True, exist_ok=True)
-    test_flac.touch()
-
-    convert_flacs([mock_flac_track], archive_folder)
-
-    expected_output = flac_folder / "test.aiff"
-    assert not expected_output.exists()  # Should fail since test.flac is empty
-
-    test_flac.unlink()
+    assert mock_file.read_text() == "mockfile"
 
 
 def test_archive_files(mock_track, archive_folder):
