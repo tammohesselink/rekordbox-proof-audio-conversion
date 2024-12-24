@@ -1,7 +1,7 @@
 name: pytest
 
 on:
-  push:
+  pull_request:
 
 jobs:
   tests:
@@ -25,20 +25,10 @@ jobs:
           enable-cache: true
           cache-suffix: "optional-suffix"
 
-      - name: Install FFmpeg
-        id: install_ffmpeg_from_cache
-        run: |
-          if [ -d ~/.cache/ffmpeg ]; then
-            mkdir -p ~/bin
-            cp -a ~/.cache/ffmpeg/. ~/bin/
-          else
-            sudo apt-get update
-            sudo apt-get install -y ffmpeg
-            mkdir -p ~/.cache/ffmpeg
-            cp -a /usr/bin/. ~/.cache/ffmpeg/
-            mkdir -p ~/bin
-            cp -a /usr/bin/. ~/bin/
-          fi
+      - name: Set up FFmpeg
+        uses: FedericoCarboni/setup-ffmpeg@v3
+        with:
+          ffmpeg-version: release
 
       - name: Install dependencies
         id: install_dependency_from_cache
@@ -46,5 +36,13 @@ jobs:
         run: |
           uv sync --extra dev
 
-      - name: Run tests
-        run: uv run pytest .
+      - name: Run tests with coverage
+        run: |
+          uv run pytest --cov=. --cov-report "xml:coverage.xml" --cov-report=term
+
+      - name: Get test cover
+        uses: orgoro/coverage@v3.1
+        with:
+          coverageFile: coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          thresholdAll: 0.9

@@ -45,23 +45,21 @@ def determine_target_sample_rate(sample_rate: int) -> int:
 
 
 def check_sample_rate_allowed(sample_rate: int | None) -> bool:
-    if sample_rate in [44100, 48000]:
-        return True
-    else:
+    if sample_rate is None:
         return False
+    return sample_rate in [44100, 48000]
 
 
 def check_bit_depth_allowed(bit_rate: int | None) -> bool:
-    if bit_rate == 16:
-        return True
-    else:
+    if bit_rate is None:
         return False
+    return bit_rate == 16
 
 
 def convert_aif_to_16bit(file_name: str, temp_location: str | None = None) -> bool:
     """Converts a given AIFF file to 16-bit AIFF and changes sample rate if required."""
     if temp_location is None:
-        temp_location = file_name.rsplit(".", 1)[0] + "_temp.aiff"
+        temp_location = str(file_name).rsplit(".", 1)[0] + "_temp.aiff"
 
     # Rename the original file to temp_location
     os.rename(file_name, temp_location)
@@ -126,7 +124,7 @@ def convert_aif_to_16bit(file_name: str, temp_location: str | None = None) -> bo
 def convert_wav_to_16bit(file_name: str, temp_location: str | None = None) -> bool:
     """Converts a given WAV file to 16-bit AIFF and changes sample rate if required."""
     if temp_location is None:
-        temp_location = file_name.rsplit(".", 1)[0] + "_temp.wav"
+        temp_location = str(file_name).rsplit(".", 1)[0] + "_temp.wav"
 
     # Rename the original file to temp_location
     os.rename(file_name, temp_location)
@@ -197,7 +195,11 @@ def convert_to_aiff(file_name: str, output_name: str | None = None) -> bool:
         return False
 
     if output_name is None:
-        output_name = file_name.rsplit(".", 1)[0] + ".aiff"
+        output_name = str(file_name).rsplit(".", 1)[0] + ".aiff"
+
+    # Create output directory if it doesn't exist
+    output_path = Path(output_name)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
     sample_rate, bit_depth = get_file_info(file_name)
 
@@ -251,7 +253,7 @@ def convert_to_aiff(file_name: str, output_name: str | None = None) -> bool:
 
 
 def convert_aif_to_mp3_v0(file_name: str) -> bool:
-    output_name = file_name.rsplit(".", 1)[0] + ".mp3"
+    output_name = str(file_name).rsplit(".", 1)[0] + ".mp3"
 
     # Command to use ffmpeg to convert the file to v0 mp3
     cmd = [
