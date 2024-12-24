@@ -35,8 +35,8 @@ def test_find_files_non_recursive(test_directory):
     files = find_files(".", extensions=[".wav", ".aiff"], recursive=False)
 
     assert len(files) == 2
-    assert "file1.wav" in files
-    assert "file2.aiff" in files
+    assert "./file1.wav" in files
+    assert "./file2.aiff" in files
     assert "file3.txt" not in files
     assert "subdir/file4.wav" not in files
     assert "subdir/file5.aiff" not in files
