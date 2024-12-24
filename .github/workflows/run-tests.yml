@@ -25,25 +25,18 @@ jobs:
           enable-cache: true
           cache-suffix: "optional-suffix"
 
-      - name: Cache FFmpeg
-        id: cache-ffmpeg
-        uses: actions/cache@v3
-        with:
-          path: |
-            /usr/bin/ffmpeg
-            /usr/bin/ffprobe
-            /usr/lib/x86_64-linux-gnu/libavcodec*
-            /usr/lib/x86_64-linux-gnu/libavformat*
-            /usr/lib/x86_64-linux-gnu/libavutil*
-            /usr/lib/x86_64-linux-gnu/libswresample*
-          key: ${{ runner.os }}-ffmpeg-${{ hashFiles('/usr/bin/ffmpeg') }}
-
       - name: Install FFmpeg
-        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-          sudo ldconfig
+          if [ ! -d ".ffmpeg" ]; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+            mkdir -p .ffmpeg/bin .ffmpeg/lib
+            cp $(which ffmpeg) $(which ffprobe) .ffmpeg/bin/
+            cp /usr/lib/x86_64-linux-gnu/libav{codec,format,util}*.so* .ffmpeg/lib/
+            cp /usr/lib/x86_64-linux-gnu/libswresample*.so* .ffmpeg/lib/
+          fi
+          export PATH="$PWD/.ffmpeg/bin:$PATH"
+          export LD_LIBRARY_PATH="$PWD/.ffmpeg/lib:$LD_LIBRARY_PATH"
 
       - name: Install dependencies
         id: install_dependency_from_cache
@@ -59,4 +52,5 @@ jobs:
         uses: orgoro/coverage@v3.1
         with:
           coverageFile: coverage.xml
+          token: ${{ secrets.GH_PAT }}
           thresholdAll: 0.9
